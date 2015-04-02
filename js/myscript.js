@@ -3,6 +3,26 @@ $(function() {
   "use strict";
 
   var topoffset = 50; //variable for menu height
+  var slideqty = $('#featured .item').length;
+  var wheight = $(window).height();
+  var randSlide = Math.floor(Math.random()*slideqty);
+
+  $('#featured .item').eq(randSlide).addClass('active');
+
+  $('.fullheight').css('height', wheight);
+
+  //replace IMG inside carousels with a background image
+  $('#featured .img img').each(function(){
+    var imgSrc = $(this).attr('src');
+    $(this).parent().css({'background-image' : 'url(' + imgSrc + ')'});
+    $(this).remove()
+  });
+
+  //adjust height of .fullheight elements of window resize
+  $(window).resize(function(){
+    wheight = $(window).height();
+    $('.fullheight').css('height', wheight);
+  });
 
   //Activate Scrollspy
   $('body').scrollspy({
@@ -47,8 +67,18 @@ $(function() {
   }); //smooth scrolling
 
 
+  //Automatically generate carousel indicator
+  for(var i=0; i < slideqty; i++){
+    var insertText = '<li data-target="#featured" data-slide-to="' + i + '"';
+    if(i === randSlide){
+      insertText += 'class="active"';
+    }
+    insertText += '></li>';
+       $('#featured ol').append(insertText);
+    }
   $('.carousel').carousel({
-    interval: false
+    
+    pause: false
   });
 
 });
